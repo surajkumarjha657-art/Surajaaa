@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Triveni Terrace Cafe</title>
+    <script>
+      // Ultimate fetch protection: some environments define window.fetch as a read-only getter.
+      // This script attempts to force it into a standard writable property to prevent crashes
+      // from polyfills or libraries that try to overwrite it (e.g., node-fetch, whatwg-fetch).
+      (function() {
+        try {
+          const originalFetch = window.fetch;
+          if (typeof originalFetch !== 'function') return;
+          
+          Object.defineProperty(window, 'fetch', {
+            value: originalFetch,
+            writable: true,
+            configurable: true,
+            enumerable: true
+          });
+          console.log('window.fetch has been stabilized.');
+        } catch (e) {
+          // If defineProperty fails, try adding a setter to the prototype if possible
+          try {
+            const proto = Object.getPrototypeOf(window);
+            const descriptor = Object.getOwnPropertyDescriptor(proto, 'fetch');
+            if (descriptor && descriptor.get && !descriptor.set) {
+              Object.defineProperty(proto, 'fetch', {
+                get: function() { return originalFetch; },
+                set: function(v) { console.warn('Blocked fetch override attempt.'); },
+                configurable: true
+              });
+            }
+          } catch (innerE) {
+            console.error('Failed to stabilize fetch:', innerE);
+          }
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+

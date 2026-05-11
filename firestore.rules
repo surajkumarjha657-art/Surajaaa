@@ -1,0 +1,84 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+    
+    function isAdmin() {
+      return isSignedIn() && exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() { return request.resource.data; }
+    function existing() { return resource.data; }
+
+    // Validation Blueprints
+    function isValidDish(data) {
+      return data.name is string && data.name.size() <= 100 &&
+             data.description is string && data.description.size() <= 500 &&
+             data.price is number && data.price >= 0 &&
+             data.category in ["North Indian Snacks", "Thalis", "Tea & Coffee", "Desserts", "Beverages"] &&
+             data.imageUrl is string && data.imageUrl.size() <= 1000;
+    }
+
+    function isValidReservation(data) {
+      return data.name is string && data.name.size() <= 100 &&
+             data.phoneNumber is string && data.phoneNumber.size() <= 20 &&
+             data.guests is number && data.guests > 0 && data.guests <= 20 &&
+             data.date is string && data.date.size() <= 20 &&
+             data.time is string && data.time.size() <= 20;
+    }
+
+    // Dishes: Public read, Admin write
+    match /dishes/{dishId} {
+      allow read: if true;
+      allow create: if isAdmin() && isValidDish(incoming());
+      allow update: if isAdmin() && isValidDish(incoming());
+      allow delete: if isAdmin();
+    }
+
+    // Reservations: Public create (pending only), Admin read/write/delete
+    match /reservations/{reservationId} {
+      allow create: if isValidReservation(incoming()) && incoming().status == 'pending';
+      allow read, write, delete: if isAdmin();
+    }
+
+    // Gallery: Public read, Admin write
+    match /gallery/{itemId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Reviews: Public read/create (pending state), Admin manage
+    match /reviews/{reviewId} {
+      allow read: if true;
+      allow create: if incoming().status == 'pending' && incoming().rating >= 1 && incoming().rating <= 5; 
+      allow update, delete: if isAdmin();
+    }
+
+    // Settings / Content: Public read, Admin write
+    match /settings/{settingId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    
+    // Admins: Read-only for self if exists. 
+    // Note: In dev, the code allows setDoc for admins/{uid}. 
+    // In production, this should be pre-seeded or managed by an existing admin.
+    match /admins/{userId} {
+      allow read: if isSignedIn() && request.auth.uid == userId;
+      allow write: if isSignedIn() && request.auth.uid == userId && !exists(/databases/$(database)/documents/admins/$(userId)); 
+      // Allow first-time claim in dev; remove in production
+    }
+  }
+}

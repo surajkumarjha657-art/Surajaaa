@@ -1,0 +1,8 @@
+{
+  "name": "Triveni Terrace Cafe",
+  "description": "An elegant, artistic terrace cafe website showcasing Delhi's culture, art, and fine dining with an integrated admin dashboard.",
+  "requestFramePermissions": [
+    "geolocation"
+  ],
+  "majorCapabilities": []
+}

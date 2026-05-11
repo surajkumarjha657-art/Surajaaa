@@ -1,0 +1,78 @@
+{
+  "entities": {
+    "Dish": {
+      "title": "Dish",
+      "description": "A food item in the cafe menu",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "price": { "type": "number" },
+        "category": { "type": "string", "enum": ["North Indian Snacks", "Thalis", "Tea & Coffee", "Desserts", "Beverages"] },
+        "imageUrl": { "type": "string" },
+        "isChefRecommended": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "price", "category"]
+    },
+    "Reservation": {
+      "title": "Reservation",
+      "description": "A table booking request",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "phoneNumber": { "type": "string" },
+        "guests": { "type": "number" },
+        "date": { "type": "string" },
+        "time": { "type": "string" },
+        "specialRequest": { "type": "string" },
+        "status": { "type": "string", "enum": ["pending", "accepted", "rejected"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "phoneNumber", "guests", "date", "time"]
+    },
+    "GalleryItem": {
+      "title": "Gallery Item",
+      "description": "An image or video for the cafe gallery",
+      "type": "object",
+      "properties": {
+        "imageUrl": { "type": "string" },
+        "caption": { "type": "string" },
+        "type": { "type": "string", "enum": ["image", "video"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["imageUrl", "type"]
+    },
+    "Review": {
+      "title": "Review",
+      "description": "A customer review",
+      "type": "object",
+      "properties": {
+        "authorName": { "type": "string" },
+        "rating": { "type": "number" },
+        "comment": { "type": "string" },
+        "isFeatured": { "type": "boolean" },
+        "status": { "type": "string", "enum": ["pending", "approved"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["authorName", "rating", "comment"]
+    },
+    "Settings": {
+      "title": "Settings",
+      "description": "Application settings and content",
+      "type": "object",
+      "properties": {
+        "key": { "type": "string" },
+        "value": { "type": "object" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      }
+    }
+  },
+  "firestore": {
+    "dishes": { "schema": "Dish", "description": "Collection of menu items" },
+    "reservations": { "schema": "Reservation", "description": "Collection of table bookings" },
+    "gallery": { "schema": "GalleryItem", "description": "Collection of gallery assets" },
+    "reviews": { "schema": "Review", "description": "Collection of customer feedback" },
+    "settings": { "schema": "Settings", "description": "Global settings and dynamic content" }
+  }
+}

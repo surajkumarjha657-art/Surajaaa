@@ -44,24 +44,24 @@ const ReservationPage = () => {
   };
 
   return (
-    <div className="min-h-screen pt-32 pb-24 px-6 bg-cafe-cream">
+    <div className="min-h-screen pt-40 pb-24 px-6 bg-cafe-cream">
       <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-16 space-y-4">
+        <div className="text-center mb-24 space-y-6">
           <motion.span 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="text-cafe-terracotta uppercase tracking-[0.3em] text-xs font-bold"
+            className="text-cafe-olive text-[11px] uppercase tracking-[0.4em] font-bold block"
           >
-            EXPERIENCE THE PEACE
+            Reservation
           </motion.span>
           <motion.h1 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-5xl md:text-6xl font-serif text-cafe-brown"
+            className="text-6xl md:text-8xl font-serif text-cafe-brown italic"
           >
-            Reserve Your Spot
+            Reserve <span className="text-cafe-terracotta not-italic">Your Spot</span>
           </motion.h1>
-          <p className="text-cafe-dark/60 max-w-lg mx-auto italic">
+          <p className="text-sm text-cafe-dark/60 max-w-sm mx-auto italic leading-relaxed font-light">
             Join us for an artistic dining experience on our iconic terrace.
           </p>
         </div>
@@ -70,42 +70,40 @@ const ReservationPage = () => {
           {!isSuccess ? (
             <motion.div
               key="form"
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              className="glass-card rounded-[40px] p-8 md:p-12 shadow-2xl relative overflow-hidden"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="border border-cafe-brown/10 p-10 md:p-16 bg-white/40"
             >
-              <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div className="space-y-2">
-                  <label className="text-xs uppercase tracking-widest font-bold text-cafe-brown/60">Full Name</label>
+              <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <div className="space-y-4">
+                  <label className="text-[10px] uppercase tracking-[0.2em] font-bold text-cafe-brown/40">Full Name</label>
                   <input
                     required
                     type="text"
                     placeholder="Amrita Sher-Gil"
-                    className="w-full bg-white/50 border-b border-cafe-brown/20 py-4 px-2 focus:outline-none focus:border-cafe-terracotta transition-colors"
+                    className="w-full bg-transparent border-b border-cafe-brown/20 py-2 focus:outline-none focus:border-cafe-terracotta transition-all text-sm font-serif italic"
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   />
                 </div>
                 
-                <div className="space-y-2">
-                  <label className="text-xs uppercase tracking-widest font-bold text-cafe-brown/60">Phone Number</label>
+                <div className="space-y-4">
+                  <label className="text-[10px] uppercase tracking-[0.2em] font-bold text-cafe-brown/40">Phone Number</label>
                   <input
                     required
                     type="tel"
                     placeholder="+91 99999 99999"
-                    className="w-full bg-white/50 border-b border-cafe-brown/20 py-4 px-2 focus:outline-none focus:border-cafe-terracotta transition-colors"
+                    className="w-full bg-transparent border-b border-cafe-brown/20 py-2 focus:outline-none focus:border-cafe-terracotta transition-all text-sm font-serif italic"
                     value={formData.phoneNumber}
                     onChange={(e) => setFormData({ ...formData, phoneNumber: e.target.value })}
                   />
                 </div>
 
-                <div className="space-y-2">
-                  <label className="text-xs uppercase tracking-widest font-bold text-cafe-brown/60 flex items-center gap-2">
-                    <Users size={14} /> Guests
-                  </label>
+                <div className="space-y-4">
+                  <label className="text-[10px] uppercase tracking-[0.2em] font-bold text-cafe-brown/40">Guests</label>
                   <select
-                    className="w-full bg-white/50 border-b border-cafe-brown/20 py-4 px-2 focus:outline-none focus:border-cafe-terracotta transition-colors"
+                    className="w-full bg-transparent border-b border-cafe-brown/20 py-2 focus:outline-none focus:border-cafe-terracotta transition-all text-sm font-serif italic appearance-none"
                     value={formData.guests}
                     onChange={(e) => setFormData({ ...formData, guests: parseInt(e.target.value) })}
                   >
@@ -115,26 +113,22 @@ const ReservationPage = () => {
                   </select>
                 </div>
 
-                <div className="space-y-2">
-                  <label className="text-xs uppercase tracking-widest font-bold text-cafe-brown/60 flex items-center gap-2">
-                    <Calendar size={14} /> Date
-                  </label>
+                <div className="space-y-4">
+                  <label className="text-[10px] uppercase tracking-[0.2em] font-bold text-cafe-brown/40">Date</label>
                   <input
                     required
                     type="date"
-                    className="w-full bg-white/50 border-b border-cafe-brown/20 py-4 px-2 focus:outline-none focus:border-cafe-terracotta transition-colors"
+                    className="w-full bg-transparent border-b border-cafe-brown/20 py-2 focus:outline-none focus:border-cafe-terracotta transition-all text-sm font-serif italic"
                     value={formData.date}
                     onChange={(e) => setFormData({ ...formData, date: e.target.value })}
                   />
                 </div>
 
-                <div className="space-y-2">
-                  <label className="text-xs uppercase tracking-widest font-bold text-cafe-brown/60 flex items-center gap-2">
-                    <Clock size={14} /> Time
-                  </label>
+                <div className="space-y-4">
+                  <label className="text-[10px] uppercase tracking-[0.2em] font-bold text-cafe-brown/40">Time</label>
                   <select
                     required
-                    className="w-full bg-white/50 border-b border-cafe-brown/20 py-4 px-2 focus:outline-none focus:border-cafe-terracotta transition-colors"
+                    className="w-full bg-transparent border-b border-cafe-brown/20 py-2 focus:outline-none focus:border-cafe-terracotta transition-all text-sm font-serif italic appearance-none"
                     value={formData.time}
                     onChange={(e) => setFormData({ ...formData, time: e.target.value })}
                   >
@@ -145,29 +139,27 @@ const ReservationPage = () => {
                   </select>
                 </div>
 
-                <div className="md:col-span-2 space-y-2">
-                  <label className="text-xs uppercase tracking-widest font-bold text-cafe-brown/60">Special Request (Optional)</label>
+                <div className="md:col-span-2 space-y-4">
+                  <label className="text-[10px] uppercase tracking-[0.2em] font-bold text-cafe-brown/40">Special Request</label>
                   <textarea
                     placeholder="Anniversary celebration, terrace corner, etc."
                     rows={3}
-                    className="w-full bg-white/50 border border-cafe-brown/10 rounded-2xl py-4 px-4 focus:outline-none focus:border-cafe-terracotta transition-colors"
+                    className="w-full bg-white/20 border border-cafe-brown/10 p-6 focus:outline-none focus:border-cafe-terracotta transition-all text-sm font-serif italic"
                     value={formData.specialRequest}
                     onChange={(e) => setFormData({ ...formData, specialRequest: e.target.value })}
                   />
                 </div>
 
-                <div className="md:col-span-2 pt-6">
+                <div className="md:col-span-2 pt-10">
                   <button
                     disabled={isSubmitting}
                     type="submit"
-                    className="w-full bg-cafe-terracotta text-white py-5 rounded-full font-bold text-lg flex items-center justify-center gap-3 hover:bg-cafe-brown transition-all disabled:opacity-50 shadow-lg shadow-cafe-terracotta/20"
+                    className="w-full border border-cafe-brown text-cafe-brown py-5 text-[11px] uppercase tracking-[0.3em] font-bold hover:bg-cafe-brown hover:text-white transition-all transform hover:-translate-y-1 disabled:opacity-50"
                   >
-                    {isSubmitting ? 'curating your spot...' : (
-                      <>CONFIRM RESERVATION <Send size={20} /></>
-                    )}
+                    {isSubmitting ? 'Curating Your Spot...' : 'Confirm Reservation'}
                   </button>
-                  <p className="text-center text-[10px] uppercase tracking-widest mt-6 opacity-40 font-bold">
-                    You will be redirected to WhatsApp for quick confirmation.
+                  <p className="text-center text-[10px] uppercase tracking-[0.4em] mt-8 opacity-40 font-bold">
+                    WhatsApp Confirmation Required
                   </p>
                 </div>
               </form>
@@ -175,20 +167,22 @@ const ReservationPage = () => {
           ) : (
             <motion.div
               key="success"
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="text-center space-y-8 py-20"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="text-center space-y-12 py-24 border border-cafe-olive/10 bg-white/40"
             >
-              <div className="w-24 h-24 bg-cafe-olive/20 rounded-full flex items-center justify-center mx-auto text-cafe-olive">
-                <CheckCircle2 size={64} />
+              <div className="space-y-6">
+                <div className="w-20 h-20 border border-cafe-olive/20 rounded-full flex items-center justify-center mx-auto text-cafe-olive">
+                  <CheckCircle2 size={32} />
+                </div>
+                <h2 className="text-5xl font-serif text-cafe-brown italic">Experience Confirmed</h2>
+                <p className="text-sm text-cafe-dark/60 max-w-sm mx-auto leading-relaxed italic font-light">
+                  Thank you, <span className="font-bold text-cafe-dark uppercase antialiased">{formData.name}</span>. Your request has been received. Redirecting to WhatsApp...
+                </p>
               </div>
-              <h2 className="text-4xl font-serif text-cafe-brown">Resonating Experience Confirmed!</h2>
-              <p className="text-cafe-dark/60 max-w-md mx-auto leading-relaxed">
-                Thank you, <span className="font-bold text-cafe-dark">{formData.name}</span>. Your request has been received. Redirecting you to WhatsApp for immediate confirmation...
-              </p>
               <button 
                 onClick={() => setIsSuccess(false)}
-                className="text-cafe-terracotta font-bold uppercase tracking-widest text-xs border-b border-cafe-terracotta"
+                className="text-[10px] font-bold uppercase tracking-[0.3em] text-cafe-terracotta border-b border-cafe-terracotta pb-2"
               >
                 Back to form
               </button>

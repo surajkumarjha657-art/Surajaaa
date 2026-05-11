@@ -13,28 +13,40 @@
           const originalFetch = window.fetch;
           if (typeof originalFetch !== 'function') return;
           
+          // Try redefining directly on window
           Object.defineProperty(window, 'fetch', {
             value: originalFetch,
             writable: true,
             configurable: true,
             enumerable: true
           });
-          console.log('window.fetch has been stabilized.');
-        } catch (e) {
-          // If defineProperty fails, try adding a setter to the prototype if possible
-          try {
-            const proto = Object.getPrototypeOf(window);
-            const descriptor = Object.getOwnPropertyDescriptor(proto, 'fetch');
-            if (descriptor && descriptor.get && !descriptor.set) {
-              Object.defineProperty(proto, 'fetch', {
-                get: function() { return originalFetch; },
-                set: function(v) { console.warn('Blocked fetch override attempt.'); },
-                configurable: true
-              });
-            }
-          } catch (innerE) {
-            console.error('Failed to stabilize fetch:', innerE);
+          
+          // Also handle Global if it exists
+          if (typeof globalThis !== 'undefined' && globalThis.fetch && globalThis !== window) {
+             Object.defineProperty(globalThis, 'fetch', {
+              value: originalFetch,
+              writable: true,
+              configurable: true,
+              enumerable: true
+            });
           }
+          
+          console.log('window.fetch prioritized and stabilized.');
+        } catch (e) {
+          // If defineProperty fails on window (rare), try adding a setter to potentially 
+          // problematic prototypes
+          [window, Object.getPrototypeOf(window), Window.prototype].forEach(target => {
+            try {
+              const descriptor = Object.getOwnPropertyDescriptor(target, 'fetch');
+              if (descriptor && descriptor.get && !descriptor.set) {
+                Object.defineProperty(target, 'fetch', {
+                  get: function() { return window.fetch || originalFetch; },
+                  set: function(v) { console.warn('Blocked fetch override attempt on', target); },
+                  configurable: true
+                });
+              }
+            } catch (innerE) {}
+          });
         }
       })();
     </script>

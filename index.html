@@ -5,48 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Triveni Terrace Cafe</title>
     <script>
-      // Ultimate fetch protection: some environments define window.fetch as a read-only getter.
-      // This script attempts to force it into a standard writable property to prevent crashes
-      // from polyfills or libraries that try to overwrite it (e.g., node-fetch, whatwg-fetch).
       (function() {
+        const originalFetch = window.fetch;
+        if (typeof originalFetch !== "function") return;
         try {
-          const originalFetch = window.fetch;
-          if (typeof originalFetch !== 'function') return;
-          
-          // Try redefining directly on window
+          // Attempt to redefine directly on window to make it writable
           Object.defineProperty(window, 'fetch', {
             value: originalFetch,
             writable: true,
             configurable: true,
             enumerable: true
           });
-          
-          // Also handle Global if it exists
-          if (typeof globalThis !== 'undefined' && globalThis.fetch && globalThis !== window) {
-             Object.defineProperty(globalThis, 'fetch', {
-              value: originalFetch,
-              writable: true,
-              configurable: true,
-              enumerable: true
-            });
-          }
-          
-          console.log('window.fetch prioritized and stabilized.');
         } catch (e) {
-          // If defineProperty fails on window (rare), try adding a setter to potentially 
-          // problematic prototypes
-          [window, Object.getPrototypeOf(window), Window.prototype].forEach(target => {
-            try {
-              const descriptor = Object.getOwnPropertyDescriptor(target, 'fetch');
-              if (descriptor && descriptor.get && !descriptor.set) {
-                Object.defineProperty(target, 'fetch', {
-                  get: function() { return window.fetch || originalFetch; },
-                  set: function(v) { console.warn('Blocked fetch override attempt on', target); },
-                  configurable: true
-                });
-              }
-            } catch (innerE) {}
-          });
+          try {
+            // Fallback: Add a dummy setter to the prototype if it has a getter-only 'fetch'
+            const proto = Object.getPrototypeOf(window);
+            const desc = Object.getOwnPropertyDescriptor(proto, 'fetch');
+            if (desc && desc.get && !desc.set) {
+              Object.defineProperty(proto, 'fetch', {
+                get: function() { return originalFetch; },
+                set: function(v) { console.warn('Blocked attempt to overwrite window.fetch on prototype.'); },
+                configurable: true,
+                enumerable: true
+              });
+            }
+          } catch (e2) {}
         }
       })();
     </script>

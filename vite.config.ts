@@ -16,6 +16,8 @@ export default defineConfig(({mode}) => {
         'node-fetch': path.resolve(__dirname, 'src/lib/fetch-stub.ts'),
         'cross-fetch': path.resolve(__dirname, 'src/lib/fetch-stub.ts'),
         'isomorphic-fetch': path.resolve(__dirname, 'src/lib/fetch-stub.ts'),
+        'whatwg-fetch': path.resolve(__dirname, 'src/lib/fetch-stub.ts'),
+        'unfetch': path.resolve(__dirname, 'src/lib/fetch-stub.ts'),
       },
     },
     server: {
